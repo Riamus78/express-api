@@ -41,11 +41,3 @@ export const updateUser = async (req, res, next) => {
     next(error);
   }
 };
-
-export const deleteUser = (req, res, next) => {
-  try {
-    res.status(200).json({ message: "delete user" });
-  } catch (error) {
-    next(error);
-  }
-};

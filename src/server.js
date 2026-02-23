@@ -11,6 +11,7 @@ import { errorHandler } from "./middleware/errorHandler.js";
 import { notFound } from "./middleware/notFound.js";
 import { authenticate } from "./middleware/authentication.js";
 import { rateLimiting } from "./middleware/rateLimiting.js";
+import { setupSwagger } from "./config/swagger.js";
 
 const app = express();
 app.set("trust proxy", 1);
@@ -24,13 +25,18 @@ app.use(
   }),
 );
 
-app.use("/api/auth", authRoutes);
+// Initialize Swagger
+setupSwagger(app);
 
-app.use(authenticate, rateLimiting);
+app.get("/health", rateLimiting, (req, res) => {
+  res.status(200).json({ message: "server is live" });
+});
 
-app.use("/api/user", userRoutes);
-app.use("/api/habits", habitRoutes);
-app.use("/api/tags", tagRoutes);
+app.use("/api/auth", rateLimiting, authRoutes);
+
+app.use("/api/user", authenticate, rateLimiting, userRoutes);
+app.use("/api/habits", authenticate, rateLimiting, habitRoutes);
+app.use("/api/tags", authenticate, rateLimiting, tagRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

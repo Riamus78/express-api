@@ -185,7 +185,6 @@ export const updateHabit = async (req, res, next) => {
     const habitId = req.params.id;
     const { tagIds, ...updates } = req.body;
 
-    console.log(updates);
     await db.transaction(async (tx) => {
       if (Object.keys(updates).length > 0) {
         const [updatedHabit] = await tx
@@ -303,7 +302,7 @@ export const completeHabit = async (req, res, next) => {
           isNull(habits.deletedAt),
         ),
       );
-    console.log(habitDetails);
+
     if (!habitDetails) {
       const error = new Error("habit not found");
       error.status = 404;

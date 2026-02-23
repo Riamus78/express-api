@@ -59,8 +59,8 @@ try {
 }
 
 export const isProduction = () => process.env.APP_STAGE === "prod";
-export const isDevelopment = () => process.env.APP_STAGE === "development";
-export const isTesting = () => process.env.APP_STAGE === "testing";
+export const isDevelopment = () => process.env.APP_STAGE === "dev";
+export const isTesting = () => process.env.APP_STAGE === "test";
 
 export { env };
 

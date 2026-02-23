@@ -5,15 +5,14 @@ export const rateLimiting = async (req, res, next) => {
   try {
     const ratelimit = new Ratelimit({
       redis: redis,
-      limiter: Ratelimit.slidingWindow(10, "20 s"),
-      analytics: true,
+      limiter: Ratelimit.fixedWindow(10, "30 s"),
     });
 
     const identifier = req?.user?.id || req.ip || "anonymous_api_consumer";
     const { success } = await ratelimit.limit(identifier);
 
     if (!success) {
-      const error = new Error("Unable to process at this time");
+      const error = new Error("too many requests,");
       error.status = 429;
       throw error;
     }
